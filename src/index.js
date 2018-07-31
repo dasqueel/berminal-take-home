@@ -324,6 +324,12 @@ class App extends React.Component {
               Cell: this.renderEditable
             },
             {
+              Header: 'Launch Date',
+              accessor: 'launch_date',
+              width: 80,
+              Cell: this.renderEditable
+            },
+            {
               Header: 'Active Investors',
               accessor: 'active_investors',
               Cell: this.renderEditable

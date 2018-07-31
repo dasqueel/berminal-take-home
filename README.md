@@ -1,6 +1,6 @@
 # React app for UI for coins
 
-App should be working at:
+[Link To App](https://berminal-take-home.herokuapp.com/)
 
 # Initial thoughts
 
@@ -19,3 +19,4 @@ A downside to a table would be all the information you need to convey, will it a
 * create a profile page for each coin, which can be accessed through the coin name or ticker column value
 * a modal for adding a new coin, instead of the form at the top of the page
 * createa unique Id generator for when creating an id for a new coin
+* create a popover for the active investors column.  The popover would list all the investors
