@@ -3,8 +3,6 @@ import { render } from 'react-dom';
 import _ from 'lodash';
 import { Tips } from './Utils';
 import axios from 'axios';
-
-// Import React Table
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
@@ -40,7 +38,6 @@ class App extends React.Component {
 
   async componentWillMount() {
     await this.getCoins();
-    console.log('component will mount: ', this.state.coins);
   }
 
   async getCoins() {
@@ -54,6 +51,13 @@ class App extends React.Component {
   }
 
   handleEditChange = event => {
+    /*
+    // something liks this seems more fitting
+    let inputType = event.target.name;
+    let inputValue = event.target.value;
+    this.setState({ inputType: inputValue });
+    */
+
     if (event.target.name === "newCoinName") this.setState({ newCoinName: event.target.value });
     if (event.target.name === "newTicker") this.setState({ newTicker: event.target.value });
     if (event.target.name === "newCirculation") this.setState({ newCirculation: event.target.value });
@@ -121,7 +125,6 @@ class App extends React.Component {
           allCoins,
         } = this.state;
 
-    // let coinData = { newCoinName, newTicker, newCirculation, newAmountRaised, newMinable, newActiveInvestors, newBlockExplorer, newBlog };
     let coinData = { newCoinName,
                       newTicker,
                       newCirculation,
@@ -141,10 +144,9 @@ class App extends React.Component {
                       newLaunchDate,
                       newSupply,
                     };
+
     let newCoin = createNewCoin(coinData);
-    console.log('newCoin: ',newCoin);
     allCoins.push(newCoin);
-    console.log('allCoins: ', allCoins);
     this.setState({ allCoins });
 
     // reset the "add a coin" values to empty strings
@@ -174,7 +176,6 @@ class App extends React.Component {
   async requestData(pageSize, page, sorted, filtered) {
     return new Promise((resolve, reject) => {
       let filteredData = this.state.allCoins;
-      // console.log('filteredData: ', filteredData);
 
       if (filtered.length) {
         filteredData = filtered.reduce((filteredSoFar, nextFilter) => {
@@ -201,6 +202,7 @@ class App extends React.Component {
       );
 
       // You must return an object containing the rows of the current page, and optionally the total pages number.
+      // something here is the bug that initally displays all 100 coins, intread of 10
       const res = {
         rows: sortedData.slice(pageSize * page, pageSize * page + pageSize),
         pages: Math.ceil(filteredData.length / pageSize)
