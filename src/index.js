@@ -3,6 +3,14 @@ import { render } from 'react-dom';
 import _ from 'lodash';
 import { Tips } from './Utils';
 import axios from 'axios';
+import telegram from './icons/telegram.png';
+import reddit from './icons/reddit.png';
+import twitter from './icons/twitter.png';
+import website from './icons/website.png';
+import blog from './icons/blog.png';
+import source_code from './icons/source_code.png';
+import white_paper from './icons/white_paper.png';
+import block_explorer from './icons/block_explorer.png';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
@@ -251,9 +259,31 @@ class App extends React.Component {
     }
     catch(err) {
       console.log('renderEditable err: ', err);
-      return null;
     };
 
+  };
+
+  renderSocialIcons = cellInfo => {
+    let coinData = this.state.coins[cellInfo.index];
+
+    // want to iterate through all valid social media links
+    let icons = [];
+
+    Object.keys(coinData).forEach(key => {
+      if (key === 'telegram' && coinData.telegram !== 'N/A') icons.push(<a href={coinData.telegram} target='_blank'><img src={telegram} alt='' height="20" width="20" /></a>)
+      if (key === 'reddit' && coinData.reddit !== 'N/A') icons.push(<a href={coinData.reddit} target='_blank'><img src={reddit} alt='' height="20" width="20" /></a>)
+      if (key === 'twitter' && coinData.twitter !== 'N/A') icons.push(<a href={coinData.twitter} target='_blank'><img src={twitter} alt='' height="20" width="20" /></a>)
+      if (key === 'website' && coinData.website !== 'N/A') icons.push(<a href={coinData.website} target="_blank"><img src={website} alt='' height="20" width="20" /></a>);
+      if (key === 'blog' && coinData.blog !== 'N/A') icons.push(<a href={coinData.blog} target="_blank"><img src={blog} alt='' height="20" width="20" /></a>);
+      if (key === 'source_code' && coinData.source_code !== 'N/A') icons.push(<a href={coinData.source_code} target="_blank"><img src={source_code} alt='' height="20" width="20" /></a>);
+      if (key === 'white_paper' && coinData.white_paper !== 'N/A') icons.push(<a href={coinData.white_paper} target="_blank"><img src={white_paper} alt='' height="20" width="20" /></a>);
+      if (key === 'block_explorer' && coinData.block_explorer !== 'N/A') icons.push(<a href={coinData.block_explorer} target="_blank"><img src={block_explorer} alt='' height="20" width="20" /></a>);
+    });
+    return(
+      <div>
+        {icons}
+      </div>
+    );
   };
 
   render() {
@@ -335,22 +365,11 @@ class App extends React.Component {
               Cell: this.renderEditable
             },
             {
-              Header: 'Block Explorer',
-              accessor: 'block_explorer',
-              Cell: (e => {
-                if (e.value === 'N/A') return e.value;
-                else return <a href={e.value} target='_blank'> {e.value} </a>;
-              })
-            },
-            {
-              Header: 'Blog',
-              accessor: 'blog',
+              Header: 'Links',
+              filterable: false,
               sortable: false,
-              Cell: (e => {
-                if (e.value === 'N/A') return e.value;
-                else return <a href={e.value} target='_blank'> {e.value} </a>;
-              })
-        }
+              Cell: this.renderSocialIcons
+            }
       ]}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           data={coins}
