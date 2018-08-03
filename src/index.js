@@ -13,6 +13,7 @@ import white_paper from './icons/white_paper.png';
 import block_explorer from './icons/block_explorer.png';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { Popover, OverlayTrigger } from 'react-bootstrap';
 
 class App extends React.Component {
   constructor() {
@@ -237,6 +238,7 @@ class App extends React.Component {
     );
   }
 
+  // code for handling editable html within a cell
   renderEditable = cellInfo => {
     try {
       return (
@@ -263,6 +265,7 @@ class App extends React.Component {
 
   };
 
+  // code for handling adding icons which links to their urls in each cell
   renderSocialIcons = cellInfo => {
     let coinData = this.state.coins[cellInfo.index];
 
@@ -284,6 +287,24 @@ class App extends React.Component {
         {icons}
       </div>
     );
+  };
+
+  // code for handling html that does a popover when hovering over active investors cell
+  renderHover = cellInfo => {
+    let coinData = this.state.coins[cellInfo.index];
+    return(
+      <OverlayTrigger
+        trigger={['hover']}
+        placement="top"
+        overlay={
+          <Popover id="popover-trigger-hover-focus" title="Investors">
+            {coinData.active_investors}
+          </Popover>
+        }
+      >
+        <p>{coinData.active_investors}</p>
+      </OverlayTrigger>
+    )
   };
 
   render() {
@@ -333,18 +354,20 @@ class App extends React.Component {
             {
               Header: 'Ciculation',
               accessor: 'circulation',
+              width: 150,
               Cell: this.renderEditable
             },
             {
               Header: 'Supply',
               accessor: 'supply',
+              width: 150,
               Cell: this.renderEditable
             },
             {
               Header: 'Amount Raised',
               accessor: 'amount_raised',
               filterable: false,
-              width: 120,
+              width: 100,
               Cell: this.renderEditable
             },
             {
@@ -362,7 +385,8 @@ class App extends React.Component {
             {
               Header: 'Active Investors',
               accessor: 'active_investors',
-              Cell: this.renderEditable
+              // Cell: this.renderEditable
+              Cell: this.renderHover
             },
             {
               Header: 'Links',

@@ -15,8 +15,8 @@ A downside to a table would be all the information you need to convey, will it a
 * make the adding a new coin, its own components
 * fix the bug that all 100 coins get listed on the initial render
 * configure sorting algorithm for ints, right now its based off strings
-* add a column for Social Media links, which have clickable links, instead of the string url
+* ~~add a column for Social Media links, which have clickable links, instead of the string url~~
 * create a profile page for each coin, which can be accessed through the coin name or ticker column value
 * a modal for adding a new coin, instead of the form at the top of the page
 * createa unique Id generator for when creating an id for a new coin
-* create a popover for the active investors column.  The popover would list all the investors
+* ~~create a popover for the active investors column.  The popover would list all the investors~~
