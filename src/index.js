@@ -45,46 +45,26 @@ class App extends React.Component {
     this.fetchData = this.fetchData.bind(this);
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     await this.getCoins();
   }
 
   async getCoins() {
     axios.get(`https://api.berminal.com/read_coin_desc?desc_pull_number=100`)
       .then(resp => {
-        this.setState({ coins: resp.data });
-        this.setState({ allCoins: resp.data });
-        this.setState({ loading: false });
+        this.setState(prevState => {
+          return {
+            coins: resp.data,
+            allCoins: resp.data,
+            loading: false
+          };
+        });
       })
       .catch(err => console.log(err));
   }
 
   handleEditChange = event => {
-    /*
-    // something liks this seems more fitting
-    let inputType = event.target.name;
-    let inputValue = event.target.value;
-    this.setState({ inputType: inputValue });
-    */
-
-    if (event.target.name === "newCoinName") this.setState({ newCoinName: event.target.value });
-    if (event.target.name === "newTicker") this.setState({ newTicker: event.target.value });
-    if (event.target.name === "newCirculation") this.setState({ newCirculation: event.target.value });
-    if (event.target.name === "newAmountRaised") this.setState({ newAmountRaised: event.target.value });
-    if (event.target.name === "newMinable") this.setState({ newMinable: event.target.value });
-    if (event.target.name === "newActiveInvestors") this.setState({ newActiveInvestors: event.target.value });
-    if (event.target.name === "newBlockExplorer") this.setState({ newBlockExplorer: event.target.value });
-    if (event.target.name === "newBlog") this.setState({ newBlog: event.target.value });
-    if (event.target.name === "newWebsite") this.setState({ newWebsite: event.target.value });
-    if (event.target.name === "newWhitePaper") this.setState({ newWhitePaper: event.target.value });
-    if (event.target.name === "newTwitter") this.setState({ newTwitter: event.target.value });
-    if (event.target.name === "newReddit") this.setState({ newReddit: event.target.value });
-    if (event.target.name === "newTelegram") this.setState({ newTelegram: event.target.value });
-    if (event.target.name === "newTag") this.setState({ newTag: event.target.value });
-    if (event.target.name === "newSummary") this.setState({ newSummary: event.target.value });
-    if (event.target.name === "newSourceCode") this.setState({ newSourceCode: event.target.value });
-    if (event.target.name === "newSupply") this.setState({ newSupply: event.target.value });
-    if (event.target.name === "newLaunchDate") this.setState({ newLaunchDate: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   handleAddCoin = event => {
@@ -182,7 +162,7 @@ class App extends React.Component {
     event.preventDefault();
   };
 
-  async requestData(pageSize, page, sorted, filtered) {
+  requestData(pageSize, page, sorted, filtered) {
     return new Promise((resolve, reject) => {
       let filteredData = this.state.allCoins;
 
@@ -240,29 +220,23 @@ class App extends React.Component {
 
   // code for handling editable html within a cell
   renderEditable = cellInfo => {
-    try {
-      return (
-        <div
-          style={{ backgroundColor: "#fafafa" }}
-          contentEditable
-          suppressContentEditableWarning
-          onBlur={e => {
-            let row = this.state.coins[cellInfo.index];
-            row[cellInfo.column.id] = e.target.innerHTML;
-            let newCoins = this.state.coins;
-            newCoins[cellInfo.index] = row;
-            this.setState({ coins: newCoins });
-          }}
-          dangerouslySetInnerHTML={{
-            __html: this.state.coins[cellInfo.index][cellInfo.column.id]
-          }}
-        />
-      );
-    }
-    catch(err) {
-      console.log('renderEditable err: ', err);
-    };
-
+    return (
+      <div
+        style={{ backgroundColor: "#fafafa" }}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={e => {
+          let row = this.state.coins[cellInfo.index];
+          row[cellInfo.column.id] = e.target.innerHTML;
+          let newCoins = this.state.coins;
+          newCoins[cellInfo.index] = row;
+          this.setState({ coins: newCoins });
+        }}
+        dangerouslySetInnerHTML={{
+          __html: this.state.coins[cellInfo.index][cellInfo.column.id]
+        }}
+      />
+    );
   };
 
   // code for handling adding icons which links to their urls in each cell
@@ -385,7 +359,6 @@ class App extends React.Component {
             {
               Header: 'Active Investors',
               accessor: 'active_investors',
-              // Cell: this.renderEditable
               Cell: this.renderHover
             },
             {
