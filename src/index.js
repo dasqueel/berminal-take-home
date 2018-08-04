@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import _ from 'lodash';
 import { Tips } from './Utils';
+import AddCoin from './components/AddCoin';
 import axios from 'axios';
 import telegram from './icons/telegram.png';
 import reddit from './icons/reddit.png';
@@ -22,27 +23,10 @@ class App extends React.Component {
       coins: [],
       allCoins: [],
       pages: null,
-      loading: true,
-      newCoinName: "",
-      newTicker: "",
-      newCirculation: "",
-      newAmountRaised: "",
-      newMinable: "",
-      newActiveInvestors: "",
-      newBlockExplorer: "",
-      newBlog: "",
-      newWebsite: "",
-      newWhitePaper: "",
-      newTwitter: "",
-      newReddit: "",
-      newTelegram: "",
-      newTag: "",
-      newSummary: "",
-      newSourceCode: "",
-      newSupply: "",
-      newLaunchDate: "",
+      loading: true
     };
     this.fetchData = this.fetchData.bind(this);
+    this.handleAddCoin = this.handleAddCoin.bind(this);
   }
 
   async componentDidMount() {
@@ -63,103 +47,10 @@ class App extends React.Component {
       .catch(err => console.log(err));
   }
 
-  handleEditChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleAddCoin = event => {
-
-    const createNewCoin = coinData => {
-
-      return {
-        active_investors: coinData.newActiveInvestors,
-        block_explorer: coinData.newBlockExplorer,
-        blog: coinData.newBlog,
-        circulation: coinData.newCirculation,
-        coin_name: coinData.newCoinName,
-        id: 1000, // would use a founction to get new unique id
-        launch_date: coinData.newLaunchDate,
-        minable: coinData.newMinable,
-        reddit: coinData.newReddit,
-        source_code: coinData.newSourceCode,
-        summary: coinData.newSummary,
-        supply: coinData.newSupply,
-        tag: coinData.newTag,
-        telegram: coinData.newTelegram,
-        twitter: coinData.newTwitter,
-        ticker: coinData.newTicker,
-        website: coinData.newWebsite,
-        white_paper: coinData.newWhitePaper,
-      }
-    };
-
-    let { newCoinName,
-          newTicker,
-          newCirculation,
-          newAmountRaised,
-          newMinable,
-          newActiveInvestors,
-          newBlockExplorer,
-          newBlog,
-          newWebsite,
-          newWhitePaper,
-          newTwitter,
-          newReddit,
-          newTelegram,
-          newTag,
-          newSummary,
-          newSourceCode,
-          newLaunchDate,
-          newSupply,
-          allCoins,
-        } = this.state;
-
-    let coinData = { newCoinName,
-                      newTicker,
-                      newCirculation,
-                      newAmountRaised,
-                      newMinable,
-                      newActiveInvestors,
-                      newBlockExplorer,
-                      newBlog,
-                      newWebsite,
-                      newWhitePaper,
-                      newTwitter,
-                      newReddit,
-                      newTelegram,
-                      newTag,
-                      newSummary,
-                      newSourceCode,
-                      newLaunchDate,
-                      newSupply,
-                    };
-
-    let newCoin = createNewCoin(coinData);
+  handleAddCoin = (newCoin) => {
+    let { allCoins } = this.state;
     allCoins.push(newCoin);
     this.setState({ allCoins });
-
-    // reset the "add a coin" values to empty strings
-    this.setState({
-      newCoinName: "",
-      newTicker: "",
-      newCirculation: "",
-      newSupply: "",
-      newAmountRaised: "",
-      newMinable: "",
-      newActiveInvestors: "",
-      newBlockExplorer: "",
-      newBlog: "",
-      newWebsite: "",
-      newWhitePaper: "",
-      newTwitter: "",
-      newReddit: "",
-      newTelegram: "",
-      newTag: "",
-      newSummary: "",
-      newSourceCode: "",
-      newLaunchDate: ""
-    });
-    event.preventDefault();
   };
 
   requestData(pageSize, page, sorted, filtered) {
@@ -285,32 +176,7 @@ class App extends React.Component {
     const { coins, pages, loading } = this.state;
     return (
       <div>
-        {/* this should be its own component, also its not DRY */}
-        <div className="App">
-          <p className="App-intro">
-            <h3>Add new Coin</h3>
-            <input type="text" name="newCoinName" placeholder="Coin Name..." value={this.state.newCoinName} onChange={this.handleEditChange} />
-            <input type="text" name="newTicker" placeholder="Ticker..." value={this.state.newTicker} onChange={this.handleEditChange} />
-            <input type="text" name="newCirculation" placeholder="Circulation..." value={this.state.newCirculation} onChange={this.handleEditChange} />
-            <input type="text" name="newSupply" placeholder="Supply..." value={this.state.newSupply} onChange={this.handleEditChange} />
-            <input type="text" name="newAmountRaised" placeholder="Amount Raised..." value={this.state.newAmountRaised} onChange={this.handleEditChange} />
-            <input type="text" name="newMinable" placeholder="Minalbe..." value={this.state.newMinable} onChange={this.handleEditChange} />
-            <input type="text" name="newActiveInvestors" placeholder="Investors..." value={this.state.newActiveInvestors} onChange={this.handleEditChange} />
-            <input type="text" name="newBlockExplorer" placeholder="Block Explorer URL..." value={this.state.newBlockExplorer} onChange={this.handleEditChange} />
-            <input type="text" name="newBlog" placeholder="Blog URL..." value={this.state.newBlog} onChange={this.handleEditChange} />
-            <input type="text" name="newWebsite" placeholder="Websites URL..." value={this.state.newWebsite} onChange={this.handleEditChange} />
-            <input type="text" name="newWhitePaper" placeholder="White Paper URL..." value={this.state.newWhitePaper} onChange={this.handleEditChange} />
-            <input type="text" name="newTwitter" placeholder="Twitter URL..." value={this.state.newTwitter} onChange={this.handleEditChange} />
-            <input type="text" name="newReddit" placeholder="Reddit URL..." value={this.state.newReddit} onChange={this.handleEditChange} />
-            <input type="text" name="newSummary" placeholder="Summary of coin..." value={this.state.newSummary} onChange={this.handleEditChange} />
-            <input type="text" name="newSourceCode" placeholder="Source Code URL..." value={this.state.newSourceCode} onChange={this.handleEditChange} />
-            <input type="text" name="newTag" placeholder="Tags..." value={this.state.newTag} onChange={this.handleEditChange} />
-            <input type="text" name="newLaunchDate" placeholder="Launch Date..." value={this.state.newLaunchDate} onChange={this.handleEditChange} />
-            <button onClick={this.handleAddCoin}>Add</button>
-          </p>
-          </div>
-
-        <div>
+        <AddCoin handleAddCoin={this.handleAddCoin} />
         <ReactTable
           columns={[
             {
@@ -377,7 +243,6 @@ class App extends React.Component {
           defaultPageSize={10}
           className="-striped -highlight"
         />
-      </div>
         <Tips />
       </div>
     );
